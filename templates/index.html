@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodeAlpha URL Shortener</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 35px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 90%;
+            padding: 13px;
+            border: 1px solid #aaa;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        a {
+            color: #0066cc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🔗 URL Shortener</h1>
+
+        <p class="subtitle">
+            CodeAlpha Backend Development Internship
+        </p>
+
+        <input
+            type="text"
+            id="url"
+            placeholder="Enter your long URL"
+        >
+
+        <br>
+
+        <button onclick="shortenURL()">
+            Shorten URL
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script>
+
+        async function shortenURL() {
+
+            const url = document.getElementById("url").value.trim();
+
+            if (!url) {
+                document.getElementById("result").innerHTML =
+                    "⚠️ Please enter a URL!";
+                return;
+            }
+
+            try {
+
+                const response = await fetch("/shorten", {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: url
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.short_code) {
+
+                    document.getElementById("result").innerHTML =
+                        "✅ Short Code: " + data.short_code;
+
+                } else {
+
+                    document.getElementById("result").innerHTML =
+                        "❌ Error: " + data.error;
+                }
+
+            } catch (error) {
+
+                document.getElementById("result").innerHTML =
+                    "❌ Unable to connect to server.";
+
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
