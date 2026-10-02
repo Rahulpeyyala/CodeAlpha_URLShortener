@@ -1,0 +1,5 @@
+
+__pycache__/
+*.pyc
+url_shortener.db
+.ipynb_checkpoints/
